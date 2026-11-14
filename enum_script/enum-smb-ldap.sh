@@ -1,4 +1,38 @@
 #!/bin/bash
+
+
+# ---- make sure i have the tools, if not try to install them ----
+# (needs internet + sudo, so might not work on the comp network)
+check_tool() {
+    tool=$1
+    pkg=$2
+    if command -v $tool >/dev/null 2>&1; then
+        echo "[*] $tool is installed, good"
+    else
+        echo "[!] $tool not found, installing ($pkg)..."
+        sudo apt-get install -y $pkg
+    fi
+}
+
+check_tool smbclient smbclient
+check_tool ldapsearch ldap-utils
+
+# nxc (netexec) isnt always in apt so try apt then pipx as a backup
+if command -v nxc >/dev/null 2>&1; then
+    echo "[*] nxc is installed, good"
+else
+    echo "[!] nxc not found, trying to install it..."
+    sudo apt-get install -y netexec || {
+        echo "[*] apt didnt have it, using pipx"
+        sudo apt-get install -y pipx
+        pipx install git+https://github.com/Pennyw0rth/NetExec
+        pipx ensurepath
+        echo "[!] if nxc still isnt found, open a new terminal so PATH updates"
+    }
+fi
+echo ""
+
+
 # smb + ldap enum script for the comp
 # runs a bunch of nxc/smbclient/ldapsearch stuff so i dont have to type it every time
 # only reads stuff, doesnt change anything

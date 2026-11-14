@@ -29,7 +29,7 @@ for i in 50 51 52 53 54; do
     # -sCV = default scripts + version detection
     # -T5  = go fast
     # -Pn  = dont ping first (boxes might block ping and get skipped otherwise)
-	nmap -sCV -T5 -Pn $ip -oN scans/$ip.txt
+	nmap -sCV -T5 -Pn $ip -oN scans-$base/$i.txt
 	echo "[*] done with $ip -> saved to scans/$ip.txt"
 	echo ""
 done
